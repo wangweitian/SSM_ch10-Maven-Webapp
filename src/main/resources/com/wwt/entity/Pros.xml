@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper  
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+  
+<mapper namespace="com.wwt.dao.ProviderDao">  
+<!-- 分页查询 -->
+<select id="proList" resultType="SmbmsProvider" >
+	SELECT* FROM  smbms_provider
+	<trim prefix="where" prefixOverrides="and|or">
+	 <if test="proCode!=null and proCode!=''">
+		and  proCode like concat ('%',#{proCode},'%')
+	</if> 
+	<if test="proName!=null and proName!=''">
+		and  proName like concat ('%',#{proName},'%')
+	</if>
+	</trim>
+	order by creationDate desc limit  #{start},#{size} 
+</select>
+<!-- 查询全部 -->
+<select id="allPro" resultType="int" >
+	SELECT count(1) FROM smbms_provider
+	<trim prefix="where" prefixOverrides="and |or">
+	  <if test="proCode!=null and proCode!=''">
+		and  proCode like concat ('%',#{proCode},'%')
+	</if> 
+	<if test="proName!=null and proName!=''">
+		and  proName like concat ('%',#{proName},'%')
+	</if>
+	</trim>
+</select>
+<!-- 根据ID查询账单详情 -->
+<select id="proInfo" resultType="SmbmsProvider" >
+	SELECT * FROM smbms_provider   where  id  =#{bid}
+</select>
+<!-- 删除 -->
+<delete id="delProById" >
+	delete from smbms_provider where id=#{id}
+</delete>
+<!-- 更新 -->
+<update id="updatePro" parameterType="SmbmsProvider">
+	UPDATE `smbms`.`smbms_provider`
+		SET 
+		  `proCode` = #{proCode},
+		  `proName` = #{proName},
+		  `proDesc` = #{proDesc},
+		  `proContact` = #{proContact},
+		  `proPhone` = #{proPhone},
+		  `proAddress` = #{proAddress},
+		  `proFax` = #{proFax},
+		  `createdBy` = #{createdBy},
+		  `creationDate` = #{creationDate},
+		  `modifyDate` = #{modifyDate},
+		  `modifyBy` = #{modifyBy}
+		WHERE `id` = #{id};
+</update>
+
+</mapper>
